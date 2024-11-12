@@ -1,5 +1,4 @@
-import { logger, rejectedPromiseHandler } from '@activepieces/server-shared'
-import { ActivepiecesError, ApEdition, CreateTrialLicenseKeyRequestBody, ErrorCode, isNil, LicenseKeyEntity, PackageType, PlatformRole, TelemetryEventName, UserStatus } from '@activepieces/shared'
+import { Type } from '@sinclair/typebox'
 import dayjs from 'dayjs'
 import { StatusCodes } from 'http-status-codes'
 import { flagService } from '../../flags/flag.service'
@@ -7,9 +6,13 @@ import { telemetry } from '../../helper/telemetry.utils'
 import { pieceMetadataService } from '../../pieces/piece-metadata-service'
 import { platformService } from '../../platform/platform.service'
 import { userService } from '../../user/user-service'
+import { logger, rejectedPromiseHandler } from '@activepieces/server-shared'
+import { ActivepiecesError, ApEdition, CreateTrialLicenseKeyRequestBody, ErrorCode, isNil, LicenseKeyEntity, PackageType, PlatformRole, TelemetryEventName, UserStatus } from '@activepieces/shared'
 
 
-const secretManagerLicenseKeysRoute = 'https://secrets.activepieces.com/license-keys'
+// const secretManagerLicenseKeysRoute = 'https://secrets.activepieces.com/license-keys'
+const secretManagerLicenseKeysRoute = 'http://localhost/license-keys'
+
 
 const handleUnexpectedSecretsManagerError = (message: string) => {
     logger.error(`[ERROR]: Unexpected error from secret manager: ${message}`)
@@ -18,6 +21,8 @@ const handleUnexpectedSecretsManagerError = (message: string) => {
 
 export const licenseKeysService = {
     async requestTrial(request: CreateTrialLicenseKeyRequestBody): Promise<void> {
+        // KILL THE LICENSE KEY
+        return
         const response = await fetch(secretManagerLicenseKeysRoute, {
             method: 'POST',
             headers: {
@@ -37,6 +42,7 @@ export const licenseKeysService = {
         }
     },
     async markAsActiviated(request: { key: string, platformId: string }): Promise<void> {
+        return
         try {
             const response = await fetch(`${secretManagerLicenseKeysRoute}/activate`, {
                 method: 'POST',
@@ -68,6 +74,32 @@ export const licenseKeysService = {
         }
     },
     async getKey(license: string | undefined): Promise<LicenseKeyEntity | null> {
+        const fakeKey: LicenseKeyEntity = {
+            id: '',
+            email: 'no-reply@domain.com',
+            expiresAt: '2099-12-31T23:59:59.999Z',
+            activatedAt: '2022-12-31T23:59:59.999Z',
+            createdAt: '2022-12-31T23:59:59.999Z',
+            isTrial: false,
+            key: 'have-a-nice-day',
+            ssoEnabled: false,
+            gitSyncEnabled: true,
+            showPoweredBy: false,
+            embeddingEnabled: true,
+            auditLogEnabled: true,
+            customAppearanceEnabled: true,
+            manageProjectsEnabled: true,
+            managePiecesEnabled: true,
+            manageTemplatesEnabled: true,
+            apiKeysEnabled: true,
+            customDomainsEnabled: true,
+            projectRolesEnabled: true,
+            flowIssuesEnabled: true,
+            alertsEnabled: true,
+            analyticsEnabled: true,
+        }
+        return fakeKey
+
         if (isNil(license)) {
             return null
         }

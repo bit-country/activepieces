@@ -252,6 +252,7 @@ export const setupApp = async (app: FastifyInstance): Promise<FastifyInstance> =
     logger.info({
         edition,
     }, 'Activepieces Edition')
+
     switch (edition) {
         case ApEdition.CLOUD:
             await app.register(appCredentialModule)
