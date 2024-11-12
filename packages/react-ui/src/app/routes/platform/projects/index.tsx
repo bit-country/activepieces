@@ -59,7 +59,7 @@ const columns: ColumnDef<RowDataWithActions<ProjectWithLimits>>[] = [
       <DataTableColumnHeader column={column} title={t('Members')} />
     ),
     cell: ({ row }) => {
-      return <div className="text-left">{row.original.usage.teamMembers}</div>;
+      return <div className="text-left">{row.original?.usage?.teamMembers}</div>;
     },
   },
   {
@@ -70,8 +70,8 @@ const columns: ColumnDef<RowDataWithActions<ProjectWithLimits>>[] = [
     cell: ({ row }) => {
       return (
         <div className="text-left">
-          {formatUtils.formatNumber(row.original.usage.tasks)} /{' '}
-          {formatUtils.formatNumber(row.original.plan.tasks)}
+          {formatUtils.formatNumber(row.original?.usage?.tasks)} /{' '}
+          {formatUtils.formatNumber(row.original?.plan?.tasks)}
         </div>
       );
     },
@@ -84,9 +84,9 @@ const columns: ColumnDef<RowDataWithActions<ProjectWithLimits>>[] = [
     cell: ({ row }) => {
       return (
         <div className="text-left">
-          {formatUtils.formatNumber(row.original.usage.aiTokens)} /{' '}
-          {row.original.plan.aiTokens
-            ? formatUtils.formatNumber(row.original.plan.aiTokens)
+          {formatUtils.formatNumber(row.original?.usage?.aiTokens)} /{' '}
+          {row.original?.plan?.aiTokens
+            ? formatUtils.formatNumber(row.original?.plan?.aiTokens)
             : '-'}
         </div>
       );
